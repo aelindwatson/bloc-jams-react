@@ -44,6 +44,26 @@ class Album extends Component {
     }
   }
 
+  userHoverOn(index) {
+    this.setState({onHover: index});
+  }
+
+  userHoverOff(index) {
+    this.setState({onHover: false});
+  }
+
+  userPlayPause(song, index) {
+    const isSameSong = this.state.currentSong === song;
+    if (this.state.isPlaying && isSameSong) {
+      return <span className="icon ion-md-pause"></span>;
+    } else if (this.state.onHover === index){
+      return <span className="icon ion-md-play"></span>;
+    } else {
+      return <span className="song-number">{index+1}</span>;
+  }
+}
+
+
   render() {
     return (
       <section className="album">
@@ -63,9 +83,8 @@ class Album extends Component {
           </colgroup>
           <tbody>
             {this.state.album.songs.map((song, index) => (
-              <tr className="song" key={index} onClick={() => this.handleSongClick(song)}>
-
-                <td>{index+1}</td>
+              <tr className="song" key={index} onClick={() => this.handleSongClick(song)} onMouseEnter={() => this.userHoverOn(index)} onMouseLeave={() => this.userHoverOff(index)}>
+                <td>{this.userPlayPause(song, index)}</td>
                 <td>{song.title}</td>
                 <td>{song.duration} seconds</td>
               </tr>
