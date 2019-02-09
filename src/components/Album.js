@@ -12,7 +12,8 @@ class Album extends Component {
     this.state = {
       album: album,
       currentSong: album.songs[0],
-      isPlaying: false
+      isPlaying: false,
+      onHover: false,
     };
 
     this.audioElement = document.createElement('audio');
@@ -48,21 +49,25 @@ class Album extends Component {
     this.setState({onHover: index});
   }
 
-  userHoverOff(index) {
+  userHoverOff() {
     this.setState({onHover: false});
   }
 
-  userPlayPause(song, index) {
+  userPlayPause(song, index) { console.log("Play Pause");
     const isSameSong = this.state.currentSong === song;
-    if (this.state.isPlaying && isSameSong) {
-      return <span className="icon ion-md-pause"></span>;
-    } else if (this.state.onHover === index){
-      return <span className="icon ion-md-play"></span>;
+    console.log("same song?", isSameSong);
+    console.log("this.state.onHover", this.state.onHover);
+    console.log("index", index);
+    if (this.state.onHover === song) {
+        return <span className="icon ion-md-play"></span>;
+    } else if (this.state.isPlaying && isSameSong) {
+        return <span className="icon ion-md-pause"></span>;
+    } else if (this.state.onHover === index && !this.state.isPlaying){
+        return <span className="icon ion-md-play"></span>;
     } else {
-      return <span className="song-number">{index+1}</span>;
+        return <span className="song-number">{index+1}</span>;
+    }
   }
-}
-
 
   render() {
     return (
