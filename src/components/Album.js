@@ -185,7 +185,7 @@ componentWillUnmount() {
         handleNextClick={() => this.handleNextClick()}
         handleTimeChange={ (e) => this.handleTimeChange(e)}
         formatTime = { (e) => this.formatTime(e)}
-        voume={this.state.volume}
+        volume={this.state.volume}
         handleVolumeChange={ (e) => this.handleVolumeChange(e)}
         />
       </section>
