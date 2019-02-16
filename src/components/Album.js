@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
+import PlayerBar from './PlayerBar';
 
 class Album extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class Album extends Component {
       album: album,
       currentSong: album.songs[0],
       isPlaying: false,
-      onHover: false,
+      onHover: null,
     };
 
     this.audioElement = document.createElement('audio');
@@ -45,12 +46,12 @@ class Album extends Component {
     }
   }
 
-  userHoverOn(index) {
-    this.setState({onHover: index});
+  onMouseEnter(song) { console.log("we hovered");
+    this.setState({onHover: song});
   }
 
-  userHoverOff() {
-    this.setState({onHover: false});
+  onMouseLeave() { console.log("we moved off");
+    this.setState({onHover: null});
   }
 
   userPlayPause(song, index) { console.log("Play Pause");
@@ -59,14 +60,26 @@ class Album extends Component {
     console.log("this.state.onHover", this.state.onHover);
     console.log("index", index);
     if (this.state.onHover === song) {
-        return <span className="icon ion-md-play"></span>;
-    } else if (this.state.isPlaying && isSameSong) {
+      if (this.state.isPlaying && isSameSong){
         return <span className="icon ion-md-pause"></span>;
-    } else if (this.state.onHover === index && !this.state.isPlaying){
+      } else {
         return <span className="icon ion-md-play"></span>;
+      }
     } else {
+      if (this.state.isPlaying && isSameSong){
+        return <span className="icon ion-md-pause"></span>;
+      } else {
         return <span className="song-number">{index+1}</span>;
+      }
     }
+  }
+
+  handlePrevClick() {
+    const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
+    const newIndex = Math.max(0, currentIndex - 1);
+    const newSong = this.state.album.songs[newIndex];
+    this.setSong(newSong);
+    this.play();
   }
 
   render() {
@@ -88,7 +101,7 @@ class Album extends Component {
           </colgroup>
           <tbody>
             {this.state.album.songs.map((song, index) => (
-              <tr className="song" key={index} onClick={() => this.handleSongClick(song)} onMouseEnter={() => this.userHoverOn(index)} onMouseLeave={() => this.userHoverOff(index)}>
+              <tr className="song" key={index} onClick={() => this.handleSongClick(song)} onMouseEnter={() => this.onMouseEnter(song)} onMouseLeave={() => this.onMouseLeave()} >
                 <td>{this.userPlayPause(song, index)}</td>
                 <td>{song.title}</td>
                 <td>{song.duration} seconds</td>
@@ -98,6 +111,12 @@ class Album extends Component {
       }
           </tbody>
         </table>
+        <PlayerBar
+        isPlaying={this.state.isPlaying}
+        currentSong={this.state.currentSong}
+        handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+        handlePrevClick={() => this.handlePrevClick()}
+        />
       </section>
     );
   }
