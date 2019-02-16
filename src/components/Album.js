@@ -15,12 +15,14 @@ class Album extends Component {
       currentSong: album.songs[0],
       currentTime: 0,
       duration: album.songs[0].duration,
+      volume: .5,
       isPlaying: false,
       onHover: null,
     };
 
     this.audioElement = document.createElement('audio');
     this.audioElement.src = album.songs[0].audioSrc;
+    this.audioElement.volume = this.state.volume;
   }
 
   componentDidMount() {
@@ -30,16 +32,21 @@ class Album extends Component {
     },
     durationchange: e => {
       this.setState({ duration: this.audioElement.duration });
+    },
+    volumeChange: e => {
+      this.setState({ volume: this.audioElement.volume });
     }
   };
   this.audioElement.addEventListener('timeupdate', this.eventListeners.timeupdate);
   this.audioElement.addEventListener('durationchange', this.eventListeners.durationchange);
+  this.audioElement.addEventListener('volumeChange', this.eventListeners.volumechange);
 }
 
 componentWillUnmount() {
   this.audioElement.src = null;
   this.audioElement.removeEventListener('timeupdate', this.eventListeners.timeupdate);
   this.audioElement.removeEventListener('durationchange', this.eventListeners.durationchange);
+  this.audioElement.addEventListener('volumeChange', this.eventListeners.volumechange);
 }
 
   play() {
@@ -132,6 +139,12 @@ componentWillUnmount() {
     return output;
   }
 
+  handleVolumeChange(e) { console.log("volume change");
+    const newVolume = e.target.value;
+    this.audioElement.volume = newVolume;
+    this.setState({ volume: newVolume });
+  }
+
 
   render() {
     return (
@@ -170,8 +183,10 @@ componentWillUnmount() {
         handleSongClick={() => this.handleSongClick(this.state.currentSong)}
         handlePrevClick={() => this.handlePrevClick()}
         handleNextClick={() => this.handleNextClick()}
-        handleTimeChange={(e) => this.handleTimeChange(e)}
+        handleTimeChange={ (e) => this.handleTimeChange(e)}
         formatTime = { (e) => this.formatTime(e)}
+        voume={this.state.volume}
+        handleVolumeChange={ (e) => this.handleVolumeChange(e)}
         />
       </section>
     );
