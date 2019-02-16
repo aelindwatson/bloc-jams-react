@@ -117,6 +117,21 @@ componentWillUnmount() {
     this.setState({ currentTime: newTime });
   }
 
+  formatTime(seconds) {
+    if (isNaN(seconds)) {
+      return "-:--"
+    }
+    const wholeSeconds = Math.floor(seconds);
+    const minutes = Math.floor(wholeSeconds / 60);
+    const remainingSeconds = wholeSeconds % 60;
+    let output = minutes + ':';
+    if (remainingSeconds <10) {
+      output += 0;
+    }
+    output += remainingSeconds;
+    return output;
+  }
+
 
   render() {
     return (
@@ -140,7 +155,7 @@ componentWillUnmount() {
               <tr className="song" key={index} onClick={() => this.handleSongClick(song)} onMouseEnter={() => this.onMouseEnter(song)} onMouseLeave={() => this.onMouseLeave()} >
                 <td>{this.userPlayPause(song, index)}</td>
                 <td>{song.title}</td>
-                <td>{song.duration} seconds</td>
+                <td>{this.formatTime(song.duration)}</td>
               </tr>
           )
         )
@@ -156,6 +171,7 @@ componentWillUnmount() {
         handlePrevClick={() => this.handlePrevClick()}
         handleNextClick={() => this.handleNextClick()}
         handleTimeChange={(e) => this.handleTimeChange(e)}
+        formatTime = { (e) => this.formatTime(e)}
         />
       </section>
     );
