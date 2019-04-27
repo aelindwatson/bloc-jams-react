@@ -5,16 +5,17 @@ import Landing from './components/Landing';
 import Library from './components/Library';
 import Album from './components/Album';
 
+
 class App extends Component {
   render() {
     return (
       <div className="App">
         <header>
-          <nav>
-            <Link to='/'>Landing</Link>
-            <Link to='/library'>Library</Link>
+          <nav className="link">
+            <Link to='/'style={{ textDecoration: 'none', color: '#76ff03'}}>HOME  </Link>
+            <Link to='/library'style={{ textDecoration: 'none', color: '#76ff03'}}>  LIBRARY</Link>
           </nav>
-          <h1>Bloc Jams</h1>
+          <h1 className='font-effect-anaglyph'>BLOC JAMS</h1>
         </header>
         <main>
           <Route exact path="/" component={Landing} />
