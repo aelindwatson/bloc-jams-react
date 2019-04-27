@@ -152,12 +152,28 @@ componentWillUnmount() {
         <section id="album-info">
           <img id="album-cover-art" src={this.state.album.albumCover} alt={this.state.album.title}/>
           <div className="album-details">
-            <h1 id="album-title">{this.state.album.title}</h1>
-            <h2 className="artist">{this.state.album.artist}</h2>
-            <div id="release-info">{this.state.album.releaseInfo}</div>
+          <h1 id="album-title">{this.state.album.title}</h1>
+          <h2 className="artist">{this.state.album.artist}</h2>
+          <div id="release-info">{this.state.album.releaseInfo}</div>
           </div>
+          <PlayerBar
+          isPlaying={this.state.isPlaying}
+          currentSong={this.state.currentSong}
+          currentTime={this.audioElement.currentTime}
+          duration={this.audioElement.duration}
+          handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+          handlePrevClick={() => this.handlePrevClick()}
+          handleNextClick={() => this.handleNextClick()}
+          handleTimeChange={ (e) => this.handleTimeChange(e)}
+          formatTime = { (e) => this.formatTime(e)}
+          volume={this.state.volume}
+          handleVolumeChange={ (e) => this.handleVolumeChange(e)}
+          />
+
         </section>
-        <table id="song-list">
+
+        <div className="song-list">
+        <table className="song-player">
           <colgroup>
             <col id="song-number-column" />
             <col id="song-title-column" />
@@ -173,22 +189,10 @@ componentWillUnmount() {
           )
         )
       }
-          </tbody>
-        </table>
-        <PlayerBar
-        isPlaying={this.state.isPlaying}
-        currentSong={this.state.currentSong}
-        currentTime={this.audioElement.currentTime}
-        duration={this.audioElement.duration}
-        handleSongClick={() => this.handleSongClick(this.state.currentSong)}
-        handlePrevClick={() => this.handlePrevClick()}
-        handleNextClick={() => this.handleNextClick()}
-        handleTimeChange={ (e) => this.handleTimeChange(e)}
-        formatTime = { (e) => this.formatTime(e)}
-        volume={this.state.volume}
-        handleVolumeChange={ (e) => this.handleVolumeChange(e)}
-        />
-      </section>
+           </tbody>
+         </table>
+       </div>
+  </section>
     );
   }
 }
